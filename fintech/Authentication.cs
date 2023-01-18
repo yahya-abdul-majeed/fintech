@@ -1,4 +1,5 @@
-﻿using fintech.Utility;
+﻿
+using fintech.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace fintech
 {
     public class Authentication
     {
+        private readonly JsonService JS = new JsonService();
+        private readonly Storage storage = new Storage();
 
         public bool RegisterUser()
         {
@@ -43,14 +46,10 @@ namespace fintech
             } while (!check);
 
 
-            var newUser = new User
-            {
-                Name = name,
-                Email = email,
-                PasswordHash = password
-            };
+            var newUser = new User(name,email, password);
 
-            Storage.Users.Add(newUser);
+            storage.Users.Add(newUser);
+            storage.UpdateLists();
             Console.ReadLine();
             return true;
         }
@@ -79,12 +78,13 @@ namespace fintech
                 }
             } while (!check);
 
-            var user = Storage.Users.FirstOrDefault(u => u.Email == email);
+            var user = storage.Users.FirstOrDefault(u => u.Email == email);
             if (user is not null)
             {
                 if (user.PasswordHash == password)
                 {
                     //user logged in
+                    Console.WriteLine("user logged in");
                     return true;
                 }
                 else

@@ -1,4 +1,4 @@
 ﻿using fintech;
 
-var a = new Authentication();
-a.RegisterUser();
+var a = new Menus() ;
+a.MainMenu();

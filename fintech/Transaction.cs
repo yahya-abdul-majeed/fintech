@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace fintech.Interfaces
+namespace fintech
 {
-    public interface IWallet
+    public class Transaction
     {
+        public double amount { get; set; }
+        public DateTime date { get; set; }
     }
 }

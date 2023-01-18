@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "yahya",
+    "Email": "yahya.zf2@gmail.com",
+    "PasswordHash": "asdf",
+    "Wallets": [
+      {
+        "Id": "00000000-0000-0000-0000-000000000000",
+        "currency": "usd",
+        "balance": 0.0,
+        "transactions": []
+      }
+    ]
+  }
+]

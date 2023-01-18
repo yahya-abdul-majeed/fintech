@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 
 namespace fintech
 {
-    public enum ExpenseType{
-        food,
-        medicine,
-        restaurant
-    }
-    public class Expense:Transaction
+    public class Expense:Operation
     {
-        public ExpenseType expenseType { get;set; }
+        public ExpenseType ExpenseType { get; set; }
+        public double amount;
     }
 }

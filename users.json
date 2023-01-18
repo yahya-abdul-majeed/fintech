@@ -5,10 +5,11 @@
     "PasswordHash": "asdf",
     "Wallets": [
       {
-        "Id": "00000000-0000-0000-0000-000000000000",
-        "currency": "usd",
+        "Id": "381b2b95-cec0-4df4-a844-9ceab8f0eefd",
+        "currency": 0,
         "balance": 0.0,
-        "transactions": []
+        "incomes": [],
+        "expenses": []
       }
     ]
   }

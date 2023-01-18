@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace fintech
 {
-    public class Transaction
+    public class Operation
     {
-        public double amount { get; set; }
-        public DateTime date { get; set; }
+        public DateTime Date { get; set; }
     }
 }

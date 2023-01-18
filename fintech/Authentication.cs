@@ -11,7 +11,11 @@ namespace fintech
     public class Authentication
     {
         private readonly JsonService JS = new JsonService();
-        private readonly Storage storage = new Storage();
+
+        public Authentication()
+        {
+            Storage.Users = JS.GetUsersFromJSON();
+        }
 
         public bool RegisterUser()
         {
@@ -48,8 +52,8 @@ namespace fintech
 
             var newUser = new User(name,email, password);
 
-            storage.Users.Add(newUser);
-            storage.UpdateLists();
+            Storage.Users.Add(newUser);
+            Storage.UpdateLists();
             Console.ReadLine();
             return true;
         }
@@ -78,13 +82,14 @@ namespace fintech
                 }
             } while (!check);
 
-            var user = storage.Users.FirstOrDefault(u => u.Email == email);
+            var user = Storage.Users.FirstOrDefault(u => u.Email == email);
             if (user is not null)
             {
                 if (user.PasswordHash == password)
                 {
                     //user logged in
                     Console.WriteLine("user logged in");
+                    Storage.ActiveUser = user;
                     return true;
                 }
                 else
@@ -98,6 +103,16 @@ namespace fintech
                 Console.WriteLine("such user does not exist");
                 return false;
             }
+        }
+        public bool Logout()
+        {
+            if(Storage.ActiveUser != null)
+            {
+                Storage.ActiveUser = null;
+                Storage.ActiveWallet = null;
+                return true;
+            }
+            return false;
         }
     }
 }

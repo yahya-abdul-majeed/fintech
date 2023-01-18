@@ -6,18 +6,15 @@ using System.Threading.Tasks;
 
 namespace fintech
 {
-    public class Storage
+    public static class Storage
     {
-        private readonly JsonService JS = new JsonService();
-        public List<User> Users { get; set; }
-        public User ActiveUser { get; set; }
+        public static List<User> Users { get; set; }
+        public static User? ActiveUser { get; set; }
+        public static Wallet? ActiveWallet { get; set; }
+    
+        
 
-        public Storage()
-        {
-            Users = JS.GetUsersFromJSON();
-        }
-
-        public void UpdateLists()
+        public static void UpdateLists()
         {
             JsonService JS = new JsonService();
             JS.WriteUsersToJSON(Users);

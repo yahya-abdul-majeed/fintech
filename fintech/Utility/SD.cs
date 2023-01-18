@@ -16,5 +16,6 @@ namespace fintech.Utility
         public static Regex Yearreg = new Regex(@"^[\d]{4}$");
         public static Regex Bookreg = new Regex(@"^[\w\s]+$");
         public static Regex datereg = new Regex(@"\d\d\/\d\d\/\d\d\d\d");
+        public static Regex MoneyReg = new Regex(@"([\d]+\.?[\d]*)||([\d]*\.?[\d]+)");
     }
 }

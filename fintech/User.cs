@@ -21,7 +21,7 @@ namespace fintech
             PasswordHash = password;
             Wallets = new List<Wallet>
             {
-                new Wallet("usd")
+                new Wallet(Currency.USD)
             };
         }
     }

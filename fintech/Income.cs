@@ -6,14 +6,9 @@ using System.Threading.Tasks;
 
 namespace fintech
 {
-    public enum IncomeType
+    public class Income:Operation
     {
-        Salary,
-        Scholarship,
-        other
-    }
-    public class Income:Transaction
-    {
-        public DateTime date { get; set; }
+        public IncomeType IncomeType { get; set; }
+        public double amount;
     }
 }

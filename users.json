@@ -2,17 +2,52 @@
   {
     "Name": "yahya",
     "Email": "yahya@gmail.com",
-    "PasswordHash": "�.�\u0003��I�A\u0006�IZ�p",
+    "PasswordHash": "\u0005�*(s48l�\u0013\u001a��\u0000Њ",
     "Wallets": [
       {
-        "Id": "8bc3afd2-b7f3-4faf-895d-04c8e3aa29e9",
+        "Id": "22e27cf6-0d20-4300-ab02-fb2e2118cbd7",
         "currency": 0,
         "balance": {
           "Sign": 1,
-          "Money_whole_part": 0,
-          "Money_frac_part": 0.0
+          "Money_whole_part": 400,
+          "Money_frac_part": 0.0,
+          "Money_currency": 0
         },
-        "incomes": [],
+        "incomes": [
+          {
+            "IncomeType": 0,
+            "amount": {
+              "Sign": 1,
+              "Money_whole_part": 400,
+              "Money_frac_part": 0.0,
+              "Money_currency": 0
+            },
+            "Date": "2023-01-12T00:00:00"
+          }
+        ],
+        "expenses": []
+      },
+      {
+        "Id": "86e03cec-4e6d-4134-963b-d37bc2be094a",
+        "currency": 2,
+        "balance": {
+          "Sign": 1,
+          "Money_whole_part": 300,
+          "Money_frac_part": 0.0,
+          "Money_currency": 0
+        },
+        "incomes": [
+          {
+            "IncomeType": 2,
+            "amount": {
+              "Sign": 1,
+              "Money_whole_part": 300,
+              "Money_frac_part": 0.0,
+              "Money_currency": 0
+            },
+            "Date": "2023-01-12T00:00:00"
+          }
+        ],
         "expenses": []
       }
     ]

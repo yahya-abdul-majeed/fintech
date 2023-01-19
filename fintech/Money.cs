@@ -12,26 +12,31 @@ namespace fintech
         private int sign = 1;
         private int money_whole_part;
         private double money_frac_part;
+        private Currency money_currency;
 
         //constructors
 
         public Money()//C1
         {
             Random random = new Random();
+            var v = Enum.GetValues<Currency>();
+            money_currency = (Currency)v.GetValue(random.Next(v.Length));
             money_whole_part = random.Next();
             money_frac_part = random.NextDouble();
         }
-        public Money(int sign, int money_whole_part, double money_frac_part)//C2
+        public Money(int sign, int money_whole_part, double money_frac_part, string currency)//C2
         {
             this.sign = sign;
             this.money_whole_part = money_whole_part;
             this.money_frac_part = money_frac_part;
+            this.money_currency = (Currency)Enum.Parse(typeof(Currency), currency.ToUpper());
         }
         public Money(Money money)//C3
         {
             sign = money.sign;
             money_whole_part = money.money_whole_part;
             money_frac_part = money.money_frac_part;
+            money_currency = money.money_currency;
         }
         public Money(string numStr)//C4
         {
@@ -54,6 +59,11 @@ namespace fintech
             get { return money_frac_part; }
             set { money_frac_part = value; }
         }
+        public Currency Money_currency
+        {
+            get { return money_currency; }
+            set { money_currency = value; }
+        }
 
         //methods
         public string DisplayNumAsStr()//MD
@@ -61,6 +71,7 @@ namespace fintech
             double wholeNum = sign * (money_whole_part + money_frac_part);
             return wholeNum.ToString();
         }
+        
         public void setSign(int sign)//MS1
         {
             this.sign = sign;
@@ -221,6 +232,32 @@ namespace fintech
             double n_num = divisor.sign * (divisor.money_whole_part + divisor.money_frac_part);
             return (float)(org_num / n_num);
 
+        }
+
+        public void convertTo(Currency currency)
+        {
+            Dictionary<Tuple<Currency, Currency>, double> conversionRates = new()
+            {
+                {Tuple.Create(Currency.EUR,Currency.USD) , 1.08 },
+                {Tuple.Create(Currency.EUR,Currency.RUB) , 74.80 },
+                {Tuple.Create(Currency.USD,Currency.EUR) , 0.92 },
+                {Tuple.Create(Currency.USD,Currency.RUB) , 69.17 },
+                {Tuple.Create(Currency.RUB,Currency.EUR) , 0.013 },
+                {Tuple.Create(Currency.RUB,Currency.USD) , 0.014 },
+                {Tuple.Create(Currency.RUB,Currency.RUB) , 1 },
+                {Tuple.Create(Currency.USD,Currency.USD) , 1 },
+                {Tuple.Create(Currency.EUR,Currency.EUR) , 1 }
+            };
+
+            string balance = DisplayNumAsStr();
+            double m = double.Parse(balance);
+            m = m * conversionRates[Tuple.Create(money_currency, currency)];
+            string g = m.ToString();
+            Money obj = new Money(g);
+            this.sign = obj.sign;
+            this.money_currency= currency;
+            this.money_frac_part = obj.money_frac_part;
+            this.money_whole_part = obj.money_whole_part;
         }
     }
 }

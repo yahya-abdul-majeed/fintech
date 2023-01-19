@@ -1,4 +1,5 @@
 ﻿using fintech.Utility;
+using Microsoft.Win32.SafeHandles;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
@@ -52,10 +53,17 @@ namespace fintech
             Console.WriteLine();
             Console.WriteLine("type '<Currency>' to choose the corresponding wallet ");
             Console.WriteLine("type 'Create <Eur>' or 'Create <Rub>' to create a new wallet");
+            Console.WriteLine("type 'Delete <Eur/Usd/Rub>' to delete a wallet");
+            Console.WriteLine("type 'logout' to logout");
             var input = Console.ReadLine();
 
             switch (input.ToLower())
             {
+                case "logout":
+                    _authentication.Logout();
+                    clearConsole();
+                    MainMenu();
+                    break;
                 case "usd":
                     Storage.ActiveWallet = Storage.ActiveUser.Wallets.FirstOrDefault(u => u.currency == Currency.USD);
                     clearConsole();
@@ -100,6 +108,19 @@ namespace fintech
                     clearConsole();
                     userMenu();
                     break;
+                case "create usd":
+                    if (Storage.ActiveUser.Wallets.FirstOrDefault(u => u.currency == Currency.USD) != null)
+                    {
+                        Console.WriteLine("you already have a usd wallet");
+                        Console.ReadLine();
+                        clearConsole();
+                        userMenu();
+                    }
+                    var wallet_usd = new Wallet(Currency.USD);
+                    Storage.ActiveUser.Wallets.Add(wallet_usd);
+                    clearConsole();
+                    userMenu();
+                    break;
                 case "create rub":
                     if (Storage.ActiveUser.Wallets.FirstOrDefault(u => u.currency == Currency.RUB) != null)
                     {
@@ -113,6 +134,48 @@ namespace fintech
                     clearConsole();
                     userMenu();
                     break;
+                case "delete usd":
+                    var walletusd = Storage.ActiveUser.Wallets.FirstOrDefault(u=>u.currency== Currency.USD);
+                    if (walletusd != null)
+                    {
+                        Storage.ActiveUser.Wallets.Remove(walletusd);
+                        clearConsole();
+                        userMenu();
+                    }
+                    else
+                    {
+                        clearConsole();
+                        userMenu();
+                    }
+                    break;
+                case "delete eur":
+                    var walleteur = Storage.ActiveUser.Wallets.FirstOrDefault(u => u.currency == Currency.EUR);
+                    if (walleteur != null)
+                    {
+                        Storage.ActiveUser.Wallets.Remove(walleteur);
+                        clearConsole();
+                        userMenu();
+                    }
+                    else
+                    {
+                        clearConsole();
+                        userMenu();
+                    }
+                    break;
+                case "delete rub":
+                    var walletrub = Storage.ActiveUser.Wallets.FirstOrDefault(u => u.currency == Currency.RUB);
+                    if (walletrub != null)
+                    {
+                        Storage.ActiveUser.Wallets.Remove(walletrub);
+                        clearConsole();
+                        userMenu();
+                    }
+                    else
+                    {
+                        clearConsole();
+                        userMenu();
+                    }
+                    break;
                 default:
                     clearConsole();
                     userMenu();
@@ -124,15 +187,30 @@ namespace fintech
         {
             Console.WriteLine("This is your "+ Storage.ActiveWallet.currency.ToString() + " wallet:");
             Console.WriteLine("Your balance is " + Storage.ActiveWallet.balance.DisplayNumAsStr());
-            Storage.ActiveWallet.CollectStatistics();
             Console.WriteLine();
 
             Console.WriteLine("type 'Add income' to add income to wallet");
             Console.WriteLine("type 'Add expense' to add expense to wallet");
+            Console.WriteLine("type 'V' to view statistics");
+            Console.WriteLine("type 'logout' to logout");
+            Console.WriteLine("type 'usermenu' to go back to user menu");
 
             var input = Console.ReadLine();
             switch (input.ToLower())
             {
+                case "usermenu":
+                    clearConsole();
+                    userMenu();
+                    break;
+                case "logout":
+                    _authentication.Logout();
+                    clearConsole();
+                    MainMenu();
+                    break;
+                case "v":
+                    clearConsole();
+                    statisticsMenu();
+                    break;
                 case "add income":
                     clearConsole();
                     addIncomeMenu();
@@ -179,6 +257,24 @@ namespace fintech
                 }
             }while(!check);
 
+            Console.WriteLine("Enter a date in the format mm/dd/yyyy");
+            do
+            {
+                input = Console.ReadLine();
+                check = SD.datereg.IsMatch(input);
+                if (check)
+                {
+                    try
+                    {
+                        income.Date = DateTime.Parse(input);
+                    } catch(Exception ex)
+                    {
+                        check = false;
+                    }
+                }
+            } while (!check);
+
+
             Storage.ActiveWallet.AddOperation(income);
             Storage.UpdateLists();
             walletMenu();
@@ -216,19 +312,144 @@ namespace fintech
                     expense.amount = new Money(input);
                 }
             } while (!check);
+            Console.WriteLine("Enter a date in the format mm/dd/yyyy");
+            do
+            {
+                input = Console.ReadLine();
+                check = SD.datereg.IsMatch(input);
+                if (check)
+                {
+                    try
+                    {
+                        expense.Date = DateTime.Parse(input);
+                    }
+                    catch (Exception ex)
+                    {
+                        check = false;
+                    }
+                }
+            } while (!check);
 
             Storage.ActiveWallet.AddOperation(expense);
             Storage.UpdateLists();
             walletMenu();
         }
+        private void statisticsMenu()
+        {
+            Storage.ActiveWallet.CollectStatistics(new DateTime(year:2000,01,01), DateTime.Now);
+            Console.WriteLine("Type c to choose a range of dates");
+            Console.WriteLine("Type 'logout' to logout");
+            Console.WriteLine("Type 'usemenu' to go back to user menu");
+            Console.WriteLine("Type 'walletmenu' to go back to wallet menu");
 
+            var input = Console.ReadLine();
+            bool check;
+            DateTime from = DateTime.Now;
+            DateTime to = DateTime.Now;
+
+            switch(input.ToLower())
+            {
+                case "logout":
+                    _authentication.Logout();
+                    clearConsole();
+                    MainMenu();
+                    break;
+                case "usermenu":
+                    clearConsole();
+                    userMenu();
+                    break;
+                case "walletmenu":
+                    clearConsole();
+                    walletMenu();
+                    break;
+                case "c":
+                    Console.WriteLine("enter date 'from' in the format mm/dd/yyyy:");
+                    do
+                    {
+                        input = Console.ReadLine();
+                        check = SD.datereg.IsMatch(input);
+                        if (check)
+                        {
+                            try
+                            {
+                                from = DateTime.Parse(input);
+                            }
+                            catch (Exception ex)
+                            {
+                                check = false;
+                            }
+                        }
+                    } while (!check);
+
+                    Console.WriteLine("enter date 'to' in the format mm/dd/yyyy:");
+                    do
+                    {
+                        input = Console.ReadLine();
+                        check = SD.datereg.IsMatch(input);
+                        if (check)
+                        {
+                            try
+                            {
+                                to = DateTime.Parse(input);
+                            }
+                            catch (Exception ex)
+                            {
+                                check = false;
+                            }
+                        }
+                    } while (!check);
+                    break;
+                default:
+                    statisticsMenu();
+                    break;
+            }
+            clearConsole();
+            Storage.ActiveWallet.CollectStatistics(from, to);
+            Console.WriteLine("type 'logout' to logout");
+            Console.WriteLine("type 'usermenu' to go back to user menu");
+            input = Console.ReadLine();
+            switch (input.ToLower())
+            {
+                case "usermenu":
+                    clearConsole();
+                    userMenu();
+                    break;
+                case "logout":
+                    _authentication.Logout();
+                    clearConsole();
+                    MainMenu();
+                    break;
+                default:
+                    clearConsole();
+                    walletMenu();
+                    break;
+            }
+
+
+        }
         private void LoginMenu()
         {
             bool success = _authentication.LoginUser();
             if (!success)
             {
                 clearConsole();
-                LoginMenu();
+                Console.WriteLine("your login credentials were wrong");
+                Console.WriteLine();
+                Console.WriteLine("type m to main menu");
+                Console.WriteLine("press any key to login again");
+                var input = Console.ReadLine();
+                switch (input.ToLower())
+                {
+                    case "m":
+                        clearConsole();
+                        MainMenu();
+                        break;
+                    default:
+                        clearConsole();
+                        LoginMenu();
+                        break;
+                }
+                
             }
             else
             {

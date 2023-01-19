@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
 
 namespace fintech
 {
@@ -46,6 +47,7 @@ namespace fintech
                 if (!String.IsNullOrEmpty(password))
                 {
                     check = true;
+                    password = Hash(password);
                 }
             } while (!check);
 
@@ -54,7 +56,6 @@ namespace fintech
 
             Storage.Users.Add(newUser);
             Storage.UpdateLists();
-            Console.ReadLine();
             return true;
         }
 
@@ -85,7 +86,7 @@ namespace fintech
             var user = Storage.Users.FirstOrDefault(u => u.Email == email);
             if (user is not null)
             {
-                if (user.PasswordHash == password)
+                if (user.PasswordHash == Hash(password))
                 {
                     //user logged in
                     Console.WriteLine("user logged in");
@@ -113,6 +114,13 @@ namespace fintech
                 return true;
             }
             return false;
+        }
+        public string Hash(string pass)
+        {
+            byte[] b = Encoding.Default.GetBytes(pass);
+            var md5 = new MD5CryptoServiceProvider();
+            var md5data = md5.ComputeHash(b, 0, b.Length);
+            return Encoding.Default.GetString(md5data);
         }
     }
 }

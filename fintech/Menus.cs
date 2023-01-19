@@ -152,7 +152,6 @@ namespace fintech
             bool check;
             string input;
 
-            income.Date = DateTime.Now;
             Console.WriteLine("choose income type by typing it:");
             var incomeTypes = (IncomeType[])Enum.GetValues(typeof(IncomeType));
             foreach (IncomeType it in incomeTypes) {

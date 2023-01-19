@@ -54,13 +54,13 @@ namespace fintech
             foreach (var income in incomes)
             {
 
-                Console.WriteLine(income.IncomeType + ": " + income.amount.DisplayNumAsStr() + income.Date.ToString());
+                Console.WriteLine(income.IncomeType + ":     " + income.amount.DisplayNumAsStr() +" "+Storage.ActiveWallet.currency+"      "+ income.Date);
             }
 
             Console.WriteLine("Expense:");
             foreach (var expense in expenses)
             {
-                Console.WriteLine(expense.ExpenseType + ": " + expense.amount.DisplayNumAsStr() + expense.Date.ToString());
+                Console.WriteLine(expense.ExpenseType + ":     " + expense.amount.DisplayNumAsStr() +" "+ Storage.ActiveWallet.currency + "      " + expense.Date);
             }
         }
     }

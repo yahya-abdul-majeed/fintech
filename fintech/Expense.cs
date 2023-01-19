@@ -9,6 +9,6 @@ namespace fintech
     public class Expense:Operation
     {
         public ExpenseType ExpenseType { get; set; }
-        public double amount;
+        public Money amount { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -17,7 +18,7 @@ namespace fintech
         public void MainMenu()
         {
             Console.WriteLine("1- Register");
-            Console.WriteLine("2-Login");
+            Console.WriteLine("2- Login");
 
             var input = Console.ReadLine();
 
@@ -119,11 +120,11 @@ namespace fintech
             }
         }
 
-        private void walletMenu(DateTime? from = null, DateTime? to = null)
+        private void walletMenu()
         {
             Console.WriteLine("This is your "+ Storage.ActiveWallet.currency.ToString() + " wallet:");
-            Console.WriteLine("Your balance is " + Storage.ActiveWallet.balance);
-            Storage.ActiveWallet.CollectStatistics(from, to);
+            Console.WriteLine("Your balance is " + Storage.ActiveWallet.balance.DisplayNumAsStr());
+            Storage.ActiveWallet.CollectStatistics();
             Console.WriteLine();
 
             Console.WriteLine("type 'Add income' to add income to wallet");
@@ -141,6 +142,8 @@ namespace fintech
                     addExpenseMenu();
                     break;
                 default:
+                    clearConsole();
+                    walletMenu();
                     break;
             }
         }
@@ -157,8 +160,9 @@ namespace fintech
             }
             do
             {
-                input = Console.ReadLine();
-                check = Array.IndexOf(incomeTypes, input) != -1;
+                input = Console.ReadLine().ToLower();
+                //check = Array.IndexOf(incomeTypes, input) != -1;
+                check = Array.Exists(incomeTypes, u=>u.ToString().ToLower().Equals(input));
                 if (check)
                 {
                     income.IncomeType = (IncomeType)Enum.Parse(typeof(IncomeType), input);
@@ -172,17 +176,51 @@ namespace fintech
                 check = SD.MoneyReg.IsMatch(input);
                 if (check)
                 {
-                    income.amount = input;
+                    income.amount = new Money(input);
                 }
             }while(!check);
 
             Storage.ActiveWallet.AddOperation(income);
-            
+            Storage.UpdateLists();
+            walletMenu();
 
         }
-        private void addExpenseMenu() { 
-            Console.WriteLine("choose expense type:");
+        private void addExpenseMenu() {
+            Expense expense = new Expense();
+            bool check;
+            string input;
 
+            expense.Date = DateTime.Now;
+            Console.WriteLine("choose expense type by typing it:");
+            var expenseTypes = (ExpenseType[])Enum.GetValues(typeof(ExpenseType));
+            foreach (ExpenseType it in expenseTypes)
+            {
+                Console.WriteLine(it);
+            }
+            do
+            {
+                input = Console.ReadLine().ToLower();
+                check = Array.Exists(expenseTypes, u => u.ToString().ToLower().Equals(input));
+                if (check)
+                {
+                    expense.ExpenseType = (ExpenseType)Enum.Parse(typeof(ExpenseType), input);
+                }
+            } while (!check);
+
+            Console.WriteLine("Enter the amount of income:");
+            do
+            {
+                input = Console.ReadLine();
+                check = SD.MoneyReg.IsMatch(input);
+                if (check)
+                {
+                    expense.amount = new Money(input);
+                }
+            } while (!check);
+
+            Storage.ActiveWallet.AddOperation(expense);
+            Storage.UpdateLists();
+            walletMenu();
         }
 
         private void LoginMenu()
@@ -191,7 +229,7 @@ namespace fintech
             if (!success)
             {
                 clearConsole();
-                MainMenu();
+                LoginMenu();
             }
             else
             {
@@ -206,7 +244,7 @@ namespace fintech
             if(!success)
             {
                 clearConsole();
-                MainMenu();
+                RegisterMenu();
             }
             else
             {

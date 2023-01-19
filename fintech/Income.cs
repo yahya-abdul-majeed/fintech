@@ -9,6 +9,6 @@ namespace fintech
     public class Income:Operation
     {
         public IncomeType IncomeType { get; set; }
-        public double amount;
+        public Money amount { get; set; }
     }
 }

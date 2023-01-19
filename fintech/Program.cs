@@ -1,6 +1,4 @@
 ﻿using fintech;
 
-//var a = new Menus() ;
-//a.MainMenu();
-
-
+var a = new Menus();
+a.MainMenu();

@@ -56,10 +56,10 @@ namespace fintech
         }
 
         //methods
-        public void DisplayNumAsStr()//MD
+        public string DisplayNumAsStr()//MD
         {
             double wholeNum = sign * (money_whole_part + money_frac_part);
-            Console.WriteLine(wholeNum.ToString());
+            return wholeNum.ToString();
         }
         public void setSign(int sign)//MS1
         {

@@ -14,8 +14,8 @@ namespace fintech
     }
     public enum IncomeType
     {
-        Salary,
-        Scholarship,
+        salary,
+        scholarship,
         other
     }
     public enum ExpenseType

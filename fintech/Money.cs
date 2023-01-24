@@ -1,237 +1,223 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+
+
+using System.ComponentModel;
+using System.Text.RegularExpressions;
 
 namespace fintech
 {
-    public class Money : IEquatable<Money>, IComparable<Money>
+    //public enum Currency{
+    //    USD,
+    //    EUR,
+    //    RUB
+    //}
+    public class Money:IComparable<Money>,IEquatable<Money>
     {
-        //fields
-        private int sign = 1;
-        private int money_whole_part;
-        private double money_frac_part;
-        private Currency money_currency;
+        public int sign { get; private set; } = 1;
+        public uint integer { get; private set; }    
+        public uint fractional { get; private set; } 
+        public Currency currency { get; private set; }  
 
-        //constructors
-
-        public Money()//C1
+        public Money()
         {
-            Random random = new Random();
-            var v = Enum.GetValues<Currency>();
-            money_currency = (Currency)v.GetValue(random.Next(v.Length));
-            money_whole_part = random.Next();
-            money_frac_part = random.NextDouble();
+            Random random = new Random();   
+            var currencies = Enum.GetValues<Currency>();
+            this.currency = (Currency)currencies.GetValue(random.Next(currencies.Length));
+            this.integer = (uint)random.Next(1000);
+            this.fractional = (uint)random.Next(0,100);
         }
-        public Money(int sign, int money_whole_part, double money_frac_part, string currency)//C2
+
+        public Money(int sign, uint integer,uint fractional, Currency currency)
         {
             this.sign = sign;
-            this.money_whole_part = money_whole_part;
-            this.money_frac_part = money_frac_part;
-            this.money_currency = (Currency)Enum.Parse(typeof(Currency), currency.ToUpper());
-        }
-        public Money(Money money)//C3
-        {
-            sign = money.sign;
-            money_whole_part = money.money_whole_part;
-            money_frac_part = money.money_frac_part;
-            money_currency = money.money_currency;
-        }
-        public Money(string numStr)//C4
-        {
-            strToNum(numStr);
+            this.integer = integer;
+            this.fractional = fractional;
+            this.currency = currency;
         }
 
-        //properties
-        public int Sign//AM1
+        public Money(Money m)
         {
-            get { return sign; }
-            set { sign = value; }
-        }
-        public int Money_whole_part//AM2
-        {
-            get { return money_whole_part; }
-            set { money_whole_part = value; }
-        }
-        public double Money_frac_part//AM3
-        {
-            get { return money_frac_part; }
-            set { money_frac_part = value; }
-        }
-        public Currency Money_currency
-        {
-            get { return money_currency; }
-            set { money_currency = value; }
+            this.sign = m.sign;
+            this.integer = m.integer;
+            this.fractional = m.fractional;
+            this.currency = m.currency;
         }
 
-        //methods
-        public string DisplayNumAsStr()//MD
+        public Money(string num)
         {
-            double wholeNum = sign * (money_whole_part + money_frac_part);
-            return wholeNum.ToString();
+            setWholeNum(num);
         }
-        
-        public void setSign(int sign)//MS1
+        public string DisplayNumAsStr()
         {
-            this.sign = sign;
-        }
-        public void setMoney_whole_part(int money_whole_part)//MS2
-        {
-            this.money_whole_part = money_whole_part;
-        }
-        public void setMoney_frac_part(double money_frac_part)//MS3
-        {
-            this.money_frac_part = money_frac_part;
-        }
-        public void strToNum(string numStr)//MS4
-        {
-            double num = double.Parse(numStr);
-            if (num < 0)
-            {
-                sign = -1;
-                num *= sign;
-            }
-            else
-            {
-                sign = 1;
-            }
+            string str = string.Empty;
+            str += sign == 1 ? "" : "-";
 
-            money_whole_part = Convert.ToInt32(Math.Floor(num));
-            money_frac_part = num - money_whole_part;
-
-        }
-        public void addValue(int sign, int money_whole_part, double money_frac_part)//MAdd1
-        {
-            double num = sign * (money_whole_part + money_frac_part);
-            double org_num = this.sign * (this.money_whole_part + this.money_frac_part);
-            double total = num + org_num;
-            strToNum(total.ToString());
-        }
-        public void addMoney(Money money)//MAdd2
-        {
-            double org_num = sign * (money_whole_part + money_frac_part);
-            double ext_num = money.sign * (money.money_whole_part + money.money_frac_part);
-            double total = org_num + ext_num;
-            strToNum(total.ToString());
-        }
-        public void subtractValue(int sign, int money_whole_part, double money_frac_part)//MSub1
-        {
-            double num = sign * (money_whole_part + money_frac_part);
-            double org_num = this.sign * (this.money_whole_part + this.money_frac_part);
-            double total = org_num - num;
-            strToNum(total.ToString());
-        }
-        public void subtractMoney(Money money)//MSub2
-        {
-            double org_num = sign * (money_whole_part + money_frac_part);
-            double ext_num = money.sign * (money.money_whole_part + money.money_frac_part);
-            double total = org_num - ext_num;
-            strToNum(total.ToString());
+            return str + integer.ToString() + "." + fractional.ToString();
         }
 
-        public bool Equals(Money other)//MEq
+        public bool setSign(int sign)
         {
-            if (other == null)
-                return false;
-            if (sign == other.sign &&
-               money_frac_part == other.money_frac_part &&
-               money_whole_part == other.money_whole_part)
+            if(sign ==1 || sign == -1){
+                this.sign = sign;
                 return true;
-            else
-                return false;
+            }
+            return false;
+        }
+        public bool setInteger(uint integer)
+        {
+            this.integer = integer;
+            return true;
+        }
+        public bool setFractional(uint fractional)
+        {
+            if(fractional >=0 && fractional < 100)
+            {
+                this.fractional = fractional;
+                return true;
+            }
+            return false;
+        }
+        public void setCurrency(Currency currency)
+        {
+            this.currency= currency;
+        }
+        public bool setWholeNum(string num)
+        {            
+            Regex moneyReg = new Regex(@"^[-+]?\d+(\.\d+)?$");
+            Regex integerReg = new Regex(@"\d+(?=\.)");
+            Regex fractionalReg = new Regex(@"(?<=\.)\d+");
+            if (moneyReg.IsMatch(num))
+            {
+                uint fractionalPart = uint.Parse(fractionalReg.Match(num).Value);
+                if (fractionalPart>=0 && fractionalPart < 100)
+                {
+                    this.fractional = fractionalPart;
+                }
+                else
+                {
+                    return false;
+                }
+                this.integer = uint.Parse(integerReg.Match(num).Value);
+                if (num[0] == '-')
+                {
+                    this.sign = -1;
+                }
+                else
+                {
+                    this.sign = 1;
+                }
+                return true;
+            }
+            return false;
         }
 
-        public int CompareTo(Money other)//MComp
+        public void addValue(int sign, uint integer, uint fractional)
         {
-            double org_num = sign * (money_whole_part + money_frac_part);
-            double com_num = other.sign * (other.money_whole_part + other.money_frac_part);
-
-            return org_num.CompareTo(com_num);
+            Money money = new Money(sign, integer, fractional, this.currency);
+            addMoney(money);
         }
 
-        public Money addTwoMoneyObjects(Money money1, Money money2)//MSum
+        public void addMoney(Money m)
         {
-            Money result = new Money();
-            double money1num = money1.sign * (money1.money_whole_part + money1.money_frac_part);
-            double money2num = money2.sign * (money2.money_whole_part + money2.money_frac_part);
-            double res = money1num + money2num;
-            if (res < 0)
+            if(this.sign == m.sign)
             {
-                result.sign = -1;
-                res *= result.sign;
-            }
-            else
-            {
-                result.sign = 1;
-            }
-            result.money_whole_part = Convert.ToInt32(res);
-            result.money_frac_part = res - result.money_whole_part;
-            return result;
-        }
-        public Money subtractTwoMoneyObjects(Money money1, Money money2)//MDif
-        {
-            Money result = new Money();
-            double money1num = money1.sign * (money1.money_whole_part + money1.money_frac_part);
-            double money2num = money2.sign * (money2.money_whole_part + money2.money_frac_part);
-            double res = money1num - money2num;
-            if (res < 0)
-            {
-                result.sign = -1;
-                res *= result.sign;
-            }
-            else
-            {
-                result.sign = 1;
-            }
-            result.money_whole_part = Convert.ToInt32(res);
-            result.money_frac_part = res - result.money_whole_part;
-            return result;
-        }
-        public Money multiplyBy(float multiplier)//MMul
-        {
-            Money result = new Money();
-            double num = sign * (money_whole_part + money_frac_part);
-            double res = num * multiplier;
+                uint num1 = convert2cents(this.integer, this.fractional);
+                uint num2 = convert2cents(m.integer, m.fractional);
 
-            if (res < 0)
-            {
-                result.sign = -1;
-                res *= -1;
-            }
-            else
-            {
-                sign = 1;
-            }
-            result.money_whole_part = Convert.ToInt32(res);
-            result.money_frac_part = res - result.money_whole_part;
-            return result;
-        }
-        public Money divideBy(float divisor)//MDiv1
-        {
-            Money result = new Money();
-            double num = sign * (money_whole_part + money_frac_part);
-            double res = num / divisor;
-
-            if (res < 0)
-            {
-                result.sign = -1;
-                res *= -1;
+                uint sum = num1 + num2;
+                this.integer = sum / 100;
+                this.fractional = sum % 100;
             }
             else
             {
-                sign = 1;
-            }
-            result.money_whole_part = Convert.ToInt32(res);
-            result.money_frac_part = res - result.money_whole_part;
-            return result;
-        }
-        public float divideMoneybyMoney(Money divisor)//MDiv2
-        {
-            double org_num = sign * (money_frac_part + money_whole_part);
-            double n_num = divisor.sign * (divisor.money_whole_part + divisor.money_frac_part);
-            return (float)(org_num / n_num);
+                var signThis = this.sign;
+                var signM = m.sign;
 
+                this.sign = 1;
+                m.sign = 1;
+
+                var result = this.CompareTo(m);
+                if (result == 1)
+                {
+                    this.sign = signThis;
+                }
+                else if (result == -1)
+                {
+                    this.sign = signM;
+                }
+                else
+                {
+                    sign = 1;
+                }
+
+
+                uint num1 = convert2cents(this.integer, this.fractional);
+                uint num2 = convert2cents(m.integer, m.fractional);
+
+                uint diff = num1> num2? num1 - num2: num2 - num1;
+                this.integer = diff / 100;
+                this.fractional = diff % 100;
+            }
+        }
+
+        public void subtractValue(int sign, uint integer, uint fractional)
+        {
+            Money money = new Money(sign,integer, fractional,this.currency);
+            subtractMoney(money); ;
+        }
+
+        public void subtractMoney(Money m)
+        {
+            if (this.sign == m.sign)
+            {
+                var tempsign = this.sign;
+
+                this.sign = 1;
+                m.sign = 1;
+
+                var result = this.CompareTo(m); 
+                if(result == 1)
+                {
+                    this.sign = tempsign;
+                }else if(result == -1)
+                {
+                    this.sign = tempsign * -1;
+                }
+                else
+                {
+                    this.sign = 1;
+                }
+
+                uint num1 = convert2cents(this.integer, this.fractional);
+                uint num2 = convert2cents(m.integer, m.fractional);
+                
+                uint diff = num1 > num2 ? num1 - num2 : num2 - num1;
+                this.integer = diff / 100;
+                this.fractional = diff % 100;
+            }
+            else
+            {
+
+                uint num1 = convert2cents(this.integer, this.fractional);
+                uint num2 = convert2cents(m.integer, m.fractional);
+
+                uint sum = num1 + num2;
+                this.integer = sum / 100;
+                this.fractional = sum % 100;
+
+            }
+        }
+
+        public static Money add2Monies(Money one, Money two)
+        {
+            one.addMoney(two);
+            return one;
+        }
+
+        public static Money subtract2Monies(Money one, Money two)
+        {
+            one.subtractMoney(two);
+            return one;
         }
 
         public void convertTo(Currency currency)
@@ -249,15 +235,69 @@ namespace fintech
                 {Tuple.Create(Currency.EUR,Currency.EUR) , 1 }
             };
 
-            string balance = DisplayNumAsStr();
-            double m = double.Parse(balance);
-            m = m * conversionRates[Tuple.Create(money_currency, currency)];
-            string g = m.ToString();
-            Money obj = new Money(g);
-            this.sign = obj.sign;
-            this.money_currency= currency;
-            this.money_frac_part = obj.money_frac_part;
-            this.money_whole_part = obj.money_whole_part;
+            var balance = convert2cents(this.integer, this.fractional);
+            balance = (uint)(balance * conversionRates[Tuple.Create(this.currency, currency)]);
+            this.currency = currency;
+            this.integer = balance / 100;
+            this.fractional = balance % 100;
+
+        }
+
+        //utility methods
+        private uint convert2cents(uint integer, uint fractional)
+        {
+            return integer * 100 + fractional;
+        }
+
+        public int CompareTo(Money other)
+        {
+            if(this.sign != other.sign)
+            {
+                return this.sign.CompareTo(other.sign);
+            }
+
+            if(this.integer != other.integer)
+            {
+                return this.integer.CompareTo(other.integer);
+            }
+
+            return this.fractional.CompareTo(other.fractional);
+            
+        }
+
+        public bool Equals(Money? other)
+        {
+            if (this.sign == other.sign && this.integer == other.integer
+                && this.fractional == other.fractional && this.currency == other.currency)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null)
+                return false;
+            Money moneyObj = obj as Money;
+            if(moneyObj == null)
+            {
+                return false;
+            }
+            else
+            {
+                return this.Equals(moneyObj);
+            }
+        }
+
+        public static bool operator  == (Money? left, Money? right)
+        {
+            return left.CompareTo(right) == 0;
+        }
+
+        public static bool operator !=(Money? left, Money? right)
+        {
+            return left.CompareTo(right) != 0;
         }
     }
 }

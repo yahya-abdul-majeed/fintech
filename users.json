@@ -5,22 +5,22 @@
     "PasswordHash": "\u0005�*(s48l�\u0013\u001a��\u0000Њ",
     "Wallets": [
       {
-        "Id": "22e27cf6-0d20-4300-ab02-fb2e2118cbd7",
+        "Id": "83e9fe1e-0acd-4d62-9e08-85c658c9fa1f",
         "currency": 0,
         "balance": {
-          "Sign": 1,
-          "Money_whole_part": 400,
-          "Money_frac_part": 0.0,
-          "Money_currency": 0
+          "sign": 1,
+          "integer": 338,
+          "fractional": 1,
+          "currency": 2
         },
         "incomes": [
           {
             "IncomeType": 0,
             "amount": {
-              "Sign": 1,
-              "Money_whole_part": 400,
-              "Money_frac_part": 0.0,
-              "Money_currency": 0
+              "sign": 1,
+              "integer": 147,
+              "fractional": 90,
+              "currency": 2
             },
             "Date": "2023-01-12T00:00:00"
           }
@@ -28,27 +28,166 @@
         "expenses": []
       },
       {
-        "Id": "86e03cec-4e6d-4134-963b-d37bc2be094a",
+        "Id": "e5674bc0-780a-40ab-87ad-db870295abef",
         "currency": 2,
         "balance": {
-          "Sign": 1,
-          "Money_whole_part": 300,
-          "Money_frac_part": 0.0,
-          "Money_currency": 0
+          "sign": 1,
+          "integer": 557,
+          "fractional": 94,
+          "currency": 1
         },
         "incomes": [
           {
             "IncomeType": 2,
             "amount": {
-              "Sign": 1,
-              "Money_whole_part": 300,
-              "Money_frac_part": 0.0,
-              "Money_currency": 0
+              "sign": 1,
+              "integer": 345,
+              "fractional": 99,
+              "currency": 2
             },
             "Date": "2023-01-12T00:00:00"
           }
         ],
         "expenses": []
+      }
+    ]
+  },
+  {
+    "Name": "yahya",
+    "Email": "yahya.zf2@gmail.cm",
+    "PasswordHash": "�.�\u0003��I�A\u0006�IZ�p",
+    "Wallets": [
+      {
+        "Id": "eb2fd3b6-b1df-4799-bce0-e3ea270c3420",
+        "currency": 0,
+        "balance": {
+          "sign": 1,
+          "integer": 721,
+          "fractional": 11,
+          "currency": 2
+        },
+        "incomes": [
+          {
+            "IncomeType": 0,
+            "amount": {
+              "sign": 1,
+              "integer": 700,
+              "fractional": 1,
+              "currency": 1
+            },
+            "Date": "2023-02-23T00:00:00"
+          }
+        ],
+        "expenses": []
+      }
+    ]
+  },
+  {
+    "Name": "ishaan",
+    "Email": "ishaan@gmail.com",
+    "PasswordHash": "�.�\u0003��I�A\u0006�IZ�p",
+    "Wallets": [
+      {
+        "Id": "8da034e6-94b4-47d8-b8cb-0daa0bab67c1",
+        "currency": 0,
+        "balance": {
+          "sign": 1,
+          "integer": 600,
+          "fractional": 0,
+          "currency": 0
+        },
+        "incomes": [
+          {
+            "IncomeType": 0,
+            "amount": {
+              "sign": 1,
+              "integer": 656,
+              "fractional": 66,
+              "currency": 2
+            },
+            "Date": "2022-02-23T00:00:00"
+          }
+        ],
+        "expenses": [
+          {
+            "ExpenseType": 0,
+            "amount": {
+              "sign": 1,
+              "integer": 15,
+              "fractional": 81,
+              "currency": 0
+            },
+            "Date": "2023-01-02T00:00:00"
+          }
+        ]
+      },
+      {
+        "Id": "dde88cfa-13b6-49d3-b6d6-fb0cc234f9bd",
+        "currency": 2,
+        "balance": {
+          "sign": 1,
+          "integer": 113,
+          "fractional": 5,
+          "currency": 0
+        },
+        "incomes": [
+          {
+            "IncomeType": 0,
+            "amount": {
+              "sign": 1,
+              "integer": 931,
+              "fractional": 11,
+              "currency": 0
+            },
+            "Date": "2023-01-05T00:00:00"
+          }
+        ],
+        "expenses": [
+          {
+            "ExpenseType": 0,
+            "amount": {
+              "sign": 1,
+              "integer": 918,
+              "fractional": 57,
+              "currency": 1
+            },
+            "Date": "2022-02-23T00:00:00"
+          }
+        ]
+      },
+      {
+        "Id": "0873798f-1aa9-4b64-a36d-484997aef236",
+        "currency": 1,
+        "balance": {
+          "sign": 1,
+          "integer": 645,
+          "fractional": 0,
+          "currency": 0
+        },
+        "incomes": [
+          {
+            "IncomeType": 2,
+            "amount": {
+              "sign": 1,
+              "integer": 645,
+              "fractional": 45,
+              "currency": 0
+            },
+            "Date": "2023-01-23T00:00:00"
+          }
+        ],
+        "expenses": [
+          {
+            "ExpenseType": 1,
+            "amount": {
+              "sign": 1,
+              "integer": 0,
+              "fractional": 45,
+              "currency": 0
+            },
+            "Date": "2022-01-23T00:00:00"
+          }
+        ]
       }
     ]
   }

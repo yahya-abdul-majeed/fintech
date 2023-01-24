@@ -302,7 +302,7 @@ namespace fintech
                 }
             } while (!check);
 
-            Console.WriteLine("Enter the amount of income:");
+            Console.WriteLine("Enter the amount of expense:");
             do
             {
                 input = Console.ReadLine();

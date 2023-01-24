@@ -18,7 +18,7 @@ namespace fintech
 
         public Wallet(Currency currency)
         {
-            balance = new Money("0");
+            balance = new Money("0.0");
             incomes = new List<Income>(); 
             expenses = new List<Expense>();
             this.currency = currency;
